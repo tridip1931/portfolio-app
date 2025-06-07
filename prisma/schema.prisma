@@ -1,0 +1,203 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Content categories (Case Studies, Articles, Notes, etc.)
+model Category {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  color       String?   // For UI theming
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  projects    Project[]
+  articles    Article[]
+  notes       Note[]
+
+  @@map("categories")
+}
+
+// Tags for flexible content organization
+model Tag {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  projects Project[]
+  articles Article[]
+  notes    Note[]
+
+  @@map("tags")
+}
+
+// Case studies and portfolio projects
+model Project {
+  id          String    @id @default(cuid())
+  title       String
+  slug        String    @unique
+  description String
+  content     String?   // MDX content
+  excerpt     String?
+  
+  // Project metadata
+  client      String?
+  year        String?
+  role        String?
+  duration    String?
+  team        String[]  // Array of team member roles
+  
+  // Project details
+  challenge   String?
+  solution    String?
+  results     String?
+  
+  // Media and assets
+  featuredImage String?
+  images        String[] // Array of image URLs
+  liveUrl       String?
+  prototypeUrl  String?
+  
+  // Status and organization
+  status      ProjectStatus @default(DRAFT)
+  featured    Boolean       @default(false)
+  published   Boolean       @default(false)
+  publishedAt DateTime?
+  
+  // SEO and metadata
+  metaTitle       String?
+  metaDescription String?
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId String?
+  tags       Tag[]
+
+  @@map("projects")
+}
+
+// Long-form articles and essays
+model Article {
+  id          String  @id @default(cuid())
+  title       String
+  slug        String  @unique
+  description String
+  content     String? // MDX content
+  excerpt     String?
+  
+  // Article metadata
+  readingTime String?
+  featured    Boolean @default(false)
+  published   Boolean @default(false)
+  publishedAt DateTime?
+  
+  // SEO and metadata
+  metaTitle       String?
+  metaDescription String?
+  
+  // Media
+  featuredImage String?
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId String?
+  tags       Tag[]
+
+  @@map("articles")
+}
+
+// Design notes and shorter observations
+model Note {
+  id        String    @id @default(cuid())
+  title     String
+  slug      String    @unique
+  content   String?   // MDX content
+  excerpt   String?
+  
+  // Note metadata
+  status    NoteStatus @default(GROWING)
+  featured  Boolean    @default(false)
+  published Boolean    @default(false)
+  
+  // Timestamps
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  category   Category? @relation(fields: [categoryId], references: [id])
+  categoryId String?
+  tags       Tag[]
+
+  @@map("notes")
+}
+
+// Contact form submissions
+model ContactSubmission {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String?
+  message   String
+  status    ContactStatus @default(NEW)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("contact_submissions")
+}
+
+// Analytics and insights (optional for future use)
+model PageView {
+  id        String   @id @default(cuid())
+  path      String
+  userAgent String?
+  referrer  String?
+  country   String?
+  createdAt DateTime @default(now())
+
+  @@map("page_views")
+}
+
+// Enums
+enum ProjectStatus {
+  DRAFT
+  IN_PROGRESS
+  COMPLETED
+  ARCHIVED
+}
+
+enum NoteStatus {
+  SEEDLING  // Just planted, very early idea
+  GROWING   // Developing, being expanded
+  EVERGREEN // Mature, stable content
+}
+
+enum ContactStatus {
+  NEW
+  READ
+  REPLIED
+  ARCHIVED
+}
