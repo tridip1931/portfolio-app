@@ -1,0 +1,82 @@
+---
+title: "MDX Test Page"
+description: "Testing MDX integration with Next.js App Router"
+---
+
+# MDX Integration Test
+
+Welcome to our MDX test page! This page demonstrates that MDX is working correctly with Next.js App Router.
+
+## Features Working
+
+✅ **File-based routing**: This page is accessible at `/test-mdx`  
+✅ **Frontmatter**: Metadata is properly parsed  
+✅ **Custom components**: See the examples below  
+✅ **Markdown syntax**: Headers, lists, links, and more  
+
+## Custom Components Demo
+
+<CaseStudyHeader 
+  title="Sample Case Study" 
+  client="Demo Client" 
+  year="2024" 
+  role="Product Designer" 
+/>
+
+<ProcessSection title="Process Demo">
+
+This is a custom ProcessSection component that helps organize content in case studies. It provides:
+
+- Consistent styling across case studies
+- Clear content hierarchy  
+- Semantic HTML structure
+- Responsive design
+
+</ProcessSection>
+
+## Typography Examples
+
+Here's how different text elements look:
+
+### This is a heading level 3
+
+Regular paragraph text with **bold text** and *italic text*. You can also include `inline code` and [links to other pages](/).
+
+> This is a blockquote that demonstrates our custom styling. It's perfect for highlighting important quotes from users or stakeholders.
+
+#### Code Blocks
+
+```jsx
+// Code blocks have syntax highlighting
+const ExampleComponent = ({ title }) => {
+  return (
+    <div className="example">
+      <h1>{title}</h1>
+      <p>This is a React component example</p>
+    </div>
+  );
+};
+```
+
+#### Lists
+
+Unordered list:
+- First item
+- Second item  
+- Third item with more details
+
+Ordered list:
+1. Research phase
+2. Design exploration
+3. Prototyping and testing
+4. Final implementation
+
+## Navigation
+
+- [Back to Homepage](/)
+- [View a Case Study](../content/case-studies/sample-project)
+- [Read an Article](../content/articles/design-systems-at-scale)
+
+---
+
+*This test page confirms that MDX is properly integrated and ready for content creation!* 
